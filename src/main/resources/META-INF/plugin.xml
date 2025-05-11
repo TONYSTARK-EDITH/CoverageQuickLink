@@ -1,0 +1,68 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
+    <id>org.stark.CoverageQuickLink</id>
+
+    <!-- Public plugin name should be written in Title Case.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
+    <name>CoverageQuickLink</name>
+
+    <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
+    <vendor email="manthirajak@gmail.com" url="https://www.google.com/">Stark Industries</vendor>
+
+    <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
+    <description>
+        <![CDATA[
+            <h2>Seamless Code Coverage Analysis</h2>
+
+            <p>Enhance your development workflow with integrated code coverage analysis directly within IntelliJ IDEA. This plugin provides streamlined access to coverage reports through native IDE tooling and contextual actions.</p>
+
+            <h3>Key Features</h3>
+            <ul>
+                <li><b>Native IDE Integration—</b>Seamlessly works with IntelliJ's built-in Coverage Tool Window</li>
+                <li><b>Comprehensive Format Support</b>
+                    <ul>
+                        <li>IntelliJ Coverage (.ic) files</li>
+                        <li>JaCoCo XML coverage reports</li>
+                        <li>Cobertura-format coverage data</li>
+                    </ul>
+                </li>
+                <li><b>Intelligent Detection—</b>Automatically identifies and processes coverage report files</li>
+                <li><b>Quick Access—</b>Convenient context menu actions in Project View</li>
+            </ul>
+
+            <h3>Workflow Optimization</h3>
+            <ul>
+                <li><b>Efficient Visualization</b> - Single-click access to coverage data visualization</li>
+                <li><b>Context Preservation—</b>Maintain your development focus while analyzing coverage</li>
+                <li><b>Streamlined Experience—</b>Eliminate the need for external tools or file browsers</li>
+                <li><b>Industry Standards—</b>Aligned with established coverage analysis workflows</li>
+            </ul>
+
+            <br>
+            <p>Developed for professional software teams who prioritize code quality and require efficient, integrated analysis tools within their IDE.</p>
+        ]]>
+    </description>
+
+    <!-- Product and plugin compatibility requirements.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.lang</depends>
+    <depends>com.intellij.modules.coverage</depends>
+    <!-- Extension points defined by the plugin.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
+    <extensions defaultExtensionNs="com.intellij">
+        <notificationGroup
+                id="CoverageQuickLink.Notifications"
+                displayType="TOOL_WINDOW"/>
+    </extensions>
+
+    <actions>
+        <action id="org.stark.coveragequicklink.OpenInCoverageReportAction"
+                class="org.stark.coveragequicklink.OpenInCoverageReportAction" text="Coverage Report" icon="AllIcons.General.OpenInToolWindow"
+                description="Open coverage data in IntelliJ&#39;s Coverage tool window">
+            <add-to-group group-id="RevealGroup"  anchor="first"/>
+        </action>
+    </actions>
+</idea-plugin>
