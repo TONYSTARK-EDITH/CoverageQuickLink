@@ -12,16 +12,13 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.util.Map;
 
 public class OpenInCoverageReportAction extends AnAction {
 
     private static final String NOTIFICATION_GROUP = "CoverageQuickLink.Notifications";
-    private static final Map<String, String> EXTENSION_TO_RUNNER = Map.of(
-            "ic", "IDEA",
-            "exec", "JaCoCo",
-            "xml", "JaCoCo"
-    );
+    private static final Map<String, String> EXTENSION_TO_RUNNER = Map.of("ic", "IDEA", "exec", "JaCoCo", "xml", "JaCoCo");
 
     @Override
     public void update(@NotNull AnActionEvent event) {
@@ -38,29 +35,21 @@ public class OpenInCoverageReportAction extends AnAction {
         try {
             CoverageRunner runner = getCoverageRunner(file);
             if (runner == null) {
-                showNotification(project, "Unsupported coverage format", NotificationType.ERROR);
+                showNotification(project, "Unsupported coverage format");
                 return;
             }
-
             CoverageDataManager manager = CoverageDataManager.getInstance(project);
-            CoverageSuitesBundle bundle = new CoverageSuitesBundle(
-                    manager.addExternalCoverageSuite(
-                            file.getPath(),
-                            System.currentTimeMillis(),
-                            runner,
-                            new DefaultCoverageFileProvider(file.getPath())
-                    )
-            );
+            CoverageSuitesBundle bundle = new CoverageSuitesBundle(manager.addExternalCoverageSuite(new File(file.getPath()), runner));
             manager.chooseSuitesBundle(bundle);
 
             ToolWindow toolWindow = ToolWindowManager.getInstance(project).getToolWindow("Coverage");
             if (toolWindow == null) {
-                showNotification(project, "Coverage tool window not found", NotificationType.ERROR);
+                showNotification(project, "Coverage tool window not found");
                 return;
             }
             toolWindow.show();
         } catch (Exception e) {
-            showNotification(project, "Failed to load coverage file: " + e.getMessage(), NotificationType.ERROR);
+            showNotification(project, "Failed to load coverage file: " + e.getMessage());
         }
     }
 
@@ -71,15 +60,11 @@ public class OpenInCoverageReportAction extends AnAction {
         String runnerName = EXTENSION_TO_RUNNER.get(extension.toLowerCase());
         if (runnerName == null) return null;
 
-        return CoverageRunner.EP_NAME.getExtensionList().stream()
-                .filter(runner -> runnerName.equals(runner.getPresentableName()))
-                .findFirst().orElse(null);
+        return CoverageRunner.EP_NAME.getExtensionList().stream().filter(runner -> runnerName.equals(runner.getPresentableName())).findFirst().orElse(null);
     }
 
-    private void showNotification(@Nullable Project project, String message, NotificationType type) {
-        Notifications.Bus.notify(
-                new Notification(NOTIFICATION_GROUP, "CoverageQuickLink", message, type), project
-        );
+    private void showNotification(@Nullable Project project, String message) {
+        Notifications.Bus.notify(new Notification(NOTIFICATION_GROUP, "CoverageQuickLink", message, NotificationType.ERROR), project);
     }
 
     private static boolean isCoverageFile(@Nullable VirtualFile file) {

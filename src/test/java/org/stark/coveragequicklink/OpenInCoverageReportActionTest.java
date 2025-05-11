@@ -18,6 +18,6 @@ public class OpenInCoverageReportActionTest {
 
         // For more comprehensive tests, we would need to mock IntelliJ platform APIs
         // This would require a testing framework like IntelliJ Platform Test Framework
-        // For demonstration purposes, this simple test is sufficient
+        // For demonstration purposes; this simple test is sufficient
     }
 }
