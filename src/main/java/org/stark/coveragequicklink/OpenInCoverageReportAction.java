@@ -87,4 +87,9 @@ public class OpenInCoverageReportAction extends AnAction {
         String extension = file.getExtension();
         return extension != null && EXTENSION_TO_RUNNER.containsKey(extension.toLowerCase());
     }
+
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.EDT;
+    }
 }
